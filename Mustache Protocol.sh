@@ -49,38 +49,68 @@ fi
 
 cd "$GAMEDIR"
 
-# 3. Locate or Install retsurf Runtime
-RUNNER=""
-for r in \
-  "$GAMEDIR/retsurf" \
-  "/mnt/mmc/ports/retsurf/retsurf" \
-  "/mnt/sdcard/ports/retsurf/retsurf" \
-  "/roms/ports/retsurf/retsurf" \
-  "/userdata/roms/ports/retsurf/retsurf" \
-  "$controlfolder/../retsurf/retsurf" \
-  "$controlfolder/runtimes/retsurf/retsurf" \
-  "$(which retsurf 2>/dev/null)"; do
-  if [ -x "$r" ]; then
-    RUNNER="$r"
-    break
-  fi
-done
+# 3. Locate retsurf Engine (Bundled or System-wide)
+CPU_PART="$(grep -m1 -i 'CPU part' /proc/cpuinfo 2>/dev/null | grep -oiE '0x[0-9a-f]+' | head -1 | tr 'A-Z' 'a-z')"
+select_binary() {
+  case "$CPU_PART" in
+    0xd05) grep -qw atomics /proc/cpuinfo 2>/dev/null && echo "retsurf.a55" || echo "retsurf.a53" ;;
+    0xd04) echo "retsurf.a35" ;;
+    *)     echo "retsurf.a53" ;;
+  esac
+}
 
-# If retsurf is missing, attempt to install the retsurf port via HarbourMaster
-if [ -z "$RUNNER" ] && [ -x "$controlfolder/harbourmaster" ]; then
-  $ESUDO "$controlfolder/harbourmaster" --install "retsurf" >/dev/null 2>&1
+RUNNER=""
+BINNAME="$(select_binary)"
+
+# Priority 1: Use bundled engine inside port folder
+if [ -x "$GAMEDIR/$BINNAME" ]; then
+  RUNNER="$GAMEDIR/$BINNAME"
+elif [ -x "$GAMEDIR/retsurf.a53" ]; then
+  RUNNER="$GAMEDIR/retsurf.a53"
+elif [ -x "$GAMEDIR/retsurf.a55" ]; then
+  RUNNER="$GAMEDIR/retsurf.a55"
+elif [ -x "$GAMEDIR/retsurf.a35" ]; then
+  RUNNER="$GAMEDIR/retsurf.a35"
+elif [ -x "$GAMEDIR/retsurf" ]; then
+  RUNNER="$GAMEDIR/retsurf"
+fi
+
+# Priority 2: Use external/system retsurf installation if present
+if [ -z "$RUNNER" ]; then
   for r in \
-    "$GAMEDIR/../retsurf/retsurf" \
     "$controlfolder/../retsurf/retsurf" \
+    "$controlfolder/../retsurf/$BINNAME" \
     "/roms/ports/retsurf/retsurf" \
     "/mnt/mmc/ports/retsurf/retsurf" \
-    "/mnt/sdcard/ports/retsurf/retsurf"; do
+    "/mnt/sdcard/ports/retsurf/retsurf" \
+    "/userdata/roms/ports/retsurf/retsurf" \
+    "$(which retsurf 2>/dev/null)"; do
     if [ -x "$r" ]; then
       RUNNER="$r"
       break
     fi
   done
 fi
+
+# Environment & Fontconfig Configuration for Servo / retsurf
+if [ -d "$GAMEDIR/libs" ]; then
+  export LD_LIBRARY_PATH="$GAMEDIR/libs:$LD_LIBRARY_PATH"
+fi
+
+fonts_in="$GAMEDIR/etc/fonts/fonts.conf.in"
+fonts_conf="$GAMEDIR/data/fonts.conf"
+if [ ! -f /etc/fonts/fonts.conf ] && [ -f "$fonts_in" ]; then
+  mkdir -p "$GAMEDIR/data"
+  sed "s|@GAMEDIR@|$GAMEDIR|g" "$fonts_in" > "$fonts_conf"
+  export FONTCONFIG_FILE="$fonts_conf"
+fi
+
+export HOME="$GAMEDIR"
+export XDG_DATA_HOME="$GAMEDIR"
+export RETSURF_DATA_DIR="$GAMEDIR/data"
+export RETSURF_DOWNLOAD_DIR="$GAMEDIR/downloads"
+export RETSURF_PANIC_FILE="$GAMEDIR/retsurf-panic.log"
+export SDL_GAMECONTROLLERCONFIG="${RETSURF_GAMECONTROLLERCONFIG:-$sdl_controllerconfig}"
 
 # 4. Helper: Check if a TCP port is in use
 check_port() {
@@ -221,12 +251,10 @@ if [ -n "$GPTOKEYB" ] && [ -f "$GAMEDIR/Mustache Protocol.gptk" ]; then
   GPTOKEYB_PID=$!
 fi
 
-# 9. Execute the Game
+# 9. Execute the Game in Kiosk Mode
 if [ -n "$RUNNER" ]; then
-  "$RUNNER" "http://127.0.0.1:$PORT/index.html"
+  "$RUNNER" --kiosk "http://127.0.0.1:$PORT/index.html"
 else
-  echo "Error: retsurf not found. Please install the 'retsurf' browser port from PortMaster!" > "$GAMEDIR/error.log"
-  if command -v text_viewer >/dev/null 2>&1; then
-    text_viewer -f 24 -t "retsurf Required" -m "Mustache Protocol requires the 'retsurf' browser port.\nPlease install 'retsurf' via PortMaster (Manage Ports)."
-  fi
+  echo "Error: retsurf engine not found in $GAMEDIR or system ports." > "$GAMEDIR/error.log"
+  exit 1
 fi
