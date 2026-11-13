@@ -3,6 +3,7 @@
 # PortMaster Launch Script for Mustache Protocol
 # ==============================================================================
 
+# 1. Environment & PortMaster Setup
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 
 if [ -d "/opt/system/Tools/PortMaster/" ]; then
@@ -25,7 +26,7 @@ if [ -f "$controlfolder/control.txt" ]; then
   get_controls
 fi
 
-# Locate the game directory
+# 2. Locate Game Directory
 GAMEDIR=""
 for dir in \
   "$directory/ports/mustacheprotocol" \
@@ -48,7 +49,7 @@ fi
 
 cd "$GAMEDIR"
 
-# Locate or install retsurf runtime
+# 3. Locate or Install retsurf Runtime
 RUNNER=""
 for r in \
   "$GAMEDIR/retsurf" \
@@ -65,7 +66,7 @@ for r in \
   fi
 done
 
-# If retsurf is missing, attempt to fetch runtime via HarbourMaster if network available
+# If retsurf is missing, attempt to fetch runtime via HarbourMaster if network is available
 if [ -z "$RUNNER" ] && [ -x "$controlfolder/harbourmaster" ]; then
   $ESUDO "$controlfolder/harbourmaster" --runtime "retsurf"
   for r in "$controlfolder/../retsurf/retsurf" "$controlfolder/runtimes/retsurf/retsurf"; do
@@ -76,10 +77,47 @@ if [ -z "$RUNNER" ] && [ -x "$controlfolder/harbourmaster" ]; then
   done
 fi
 
-# Start local offline web server (bypasses browser CORS module blocks)
-PORT=8089
-SERVER_PID=""
+# 4. Helper: Check if a TCP port is in use
+check_port() {
+  local p=$1
+  if command -v nc >/dev/null 2>&1; then
+    nc -z 127.0.0.1 "$p" >/dev/null 2>&1
+    return $?
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 -c "import socket; s = socket.socket(); s.connect(('127.0.0.1', $p)); s.close()" >/dev/null 2>&1
+    return $?
+  fi
+  return 1
+}
 
+# 5. Dynamic Port Selection (find an open port starting at 8089)
+PORT=8089
+MAX_PORT=8100
+while check_port "$PORT" && [ "$PORT" -lt "$MAX_PORT" ]; do
+  PORT=$((PORT + 1))
+done
+
+# 6. Process State & Cleanup Trap
+SERVER_PID=""
+GPTOKEYB_PID=""
+
+cleanup() {
+  echo "[Mustache Protocol] Cleaning up processes..."
+  if [ -n "$SERVER_PID" ]; then
+    kill "$SERVER_PID" 2>/dev/null
+    wait "$SERVER_PID" 2>/dev/null
+  fi
+  if [ -n "$GPTOKEYB_PID" ]; then
+    kill "$GPTOKEYB_PID" 2>/dev/null
+    wait "$GPTOKEYB_PID" 2>/dev/null
+  fi
+  if [ -f "$controlfolder/control.txt" ]; then
+    pm_finish
+  fi
+}
+trap cleanup EXIT INT TERM
+
+# 7. Start Local Offline Web Server
 if command -v busybox >/dev/null 2>&1 && busybox --list | grep -q "^httpd$"; then
   busybox httpd -p 127.0.0.1:$PORT -h "$GAMEDIR/www" &
   SERVER_PID=$!
@@ -88,24 +126,30 @@ elif command -v python3 >/dev/null 2>&1; then
   SERVER_PID=$!
 fi
 
-sleep 1
+# 8. Active Readiness Verification Loop (Max 5s timeout instead of static sleep)
+SERVER_READY=0
+for i in $(seq 1 50); do
+  if check_port "$PORT"; then
+    SERVER_READY=1
+    break
+  fi
+  sleep 0.1
+done
 
-# Setup gamepad to keyboard mapping
-if [ -n "$GPTOKEYB" ] && [ -f "$GAMEDIR/Mustache Protocol.gptk" ]; then
-  $GPTOKEYB "retsurf" -c "$GAMEDIR/Mustache Protocol.gptk" &
+if [ "$SERVER_READY" -ne 1 ]; then
+  echo "Error: Local HTTP daemon failed to bind to port $PORT within 5 seconds." > "$GAMEDIR/error.log"
+  exit 1
 fi
 
-# Launch the game
+# 9. Bind Gamepad via gptokeyb (Track exact PID)
+if [ -n "$GPTOKEYB" ] && [ -f "$GAMEDIR/Mustache Protocol.gptk" ]; then
+  $GPTOKEYB "retsurf" -c "$GAMEDIR/Mustache Protocol.gptk" &
+  GPTOKEYB_PID=$!
+fi
+
+# 10. Execute the Game
 if [ -n "$RUNNER" ]; then
   "$RUNNER" "http://127.0.0.1:$PORT/index.html"
 else
   echo "Error: retsurf runtime not found. Please install retsurf from PortMaster!" > "$GAMEDIR/error.log"
-fi
-
-# Clean up background services upon exit
-[ -n "$SERVER_PID" ] && kill -9 "$SERVER_PID" 2>/dev/null
-pkill -f "gptokeyb" 2>/dev/null
-
-if [ -f "$controlfolder/control.txt" ]; then
-  pm_finish
 fi

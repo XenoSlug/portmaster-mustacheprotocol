@@ -32,7 +32,7 @@ Playing as Henry Cavill, you embark on a mission to stop rogue CGI artists and s
 
 * A PortMaster-compatible 64-bit ARM Linux handheld (e.g., Anbernic RG35XX+, RG35XX H, RG35XX SP, RG40XX H/V, RG28XX, TrimUI Smart Pro, Powkiddy, etc.).
 * Custom firmware with PortMaster support (e.g., **muOS**, **ArkOS**, **AmberELEC**, **ROCKNIX**, **Knulli**).
-* PortMaster **retsurf** runtime (automatically installed via PortMaster or downloadable from PortMaster Manage Ports).
+* PortMaster **retsurf** runtime (automatically installed via PortMaster or downloadable from PortMaster *Manage Ports*).
 
 ---
 
@@ -100,7 +100,27 @@ The port is mapped with an authentic 16-bit arcade button layout via `gptokeyb` 
 
 * **Phaser 3 HTML5 Canvas:** The core game runs on the Phaser 3 framework using WebGL / 2D Canvas rendering and Web Audio.
 * **Embedded retsurf Runtime:** Built on Mozilla's Servo browser engine and SDL2, `retsurf` provides hardware-accelerated rendering on lightweight Linux handhelds without desktop browser overhead.
-* **Background Localhost Server:** Because browsers restrict `<script type="module">` over raw `file://` protocols, the launch script spins up a tiny background daemon (`busybox httpd` or Python 3, built into muOS) on `127.0.0.1:8089` and terminates it cleanly when exiting the game.
+* **Robust Local Server Management:**
+  * **Dynamic Port Allocation:** The launcher dynamically checks TCP ports starting at `8089` (scanning through `8100`) to guarantee collision-free local hosting.
+  * **Active Readiness Verification:** Rather than relying on static timers, the script actively polls the socket until the daemon is listening before launching the browser.
+  * **Safe Process Lifecycle:** Both the server daemon and `gptokeyb` PID references are tracked strictly. An `EXIT/INT/TERM` shell trap ensures clean shutdown of child processes without affecting any other system utilities.
+
+---
+
+## Rebuilding & Fetching Assets from Source
+
+For developers or packagers who wish to verify, inspect, or build the game assets directly from Google's official CDN without downloading pre-built releases:
+
+```bash
+# Clone the repository
+git clone https://github.com/XenoSlug/portmaster-mustacheprotocol.git
+cd portmaster-mustacheprotocol
+
+# Run the asset fetcher tool
+python3 tools/fetch_assets.py
+```
+
+This will download and decompress all 373 assets directly from `mustacheprotocol.withgoogle.com`, populate `mustacheprotocol/www/`, and verify integrity.
 
 ---
 
@@ -143,8 +163,9 @@ Original chiptune soundtrack and audio design composed by **Mophonics**:
 
 ---
 
-## License
+## Legal & Preservation Notice
 
-* **Game Content & Assets:** © 2026 Google LLC & Henry Cavill. All rights reserved. Made available freely for promotional and charity play.
-* **Port Packaging & Scripts:** Released under the [MIT License](mustacheprotocol/licenses/LICENSE).
-* **Fonts:** Distributed under the [SIL Open Font License 1.1](mustacheprotocol/www/fonts/fonts.css).
+* **Unofficial Community Port:** This project is an independent community port created exclusively for non-commercial preservation and accessibility on open-source Linux gaming handhelds. It is not officially endorsed by or affiliated with Google LLC, Googlebook, or Henry Cavill.
+* **Intellectual Property:** All game assets, artwork, audio, characters, trademarks, and copyrights belong entirely to **Google LLC** and **Henry Cavill**. The game was released free-to-play as part of the Googlebook launch and Movember campaign at [googlebook.google/henry-cavill/](https://googlebook.google/henry-cavill/) and [mustacheprotocol.withgoogle.com](https://mustacheprotocol.withgoogle.com/).
+* **Packaging & Scripts:** Port configuration files, shell scripts, and toolchains are licensed under the [MIT License](mustacheprotocol/licenses/LICENSE).
+* **Takedown Requests:** If you are a copyright holder and wish for any materials to be removed or adjusted, please open an issue or contact the repository maintainer; requests will be honored immediately.

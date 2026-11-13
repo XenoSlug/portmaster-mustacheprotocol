@@ -1,0 +1,6 @@
+# GitHub Linguist Configuration
+# Mark the Phaser game bundle as first-class JavaScript code
+mustacheprotocol/www/assets/*.js linguist-detectable=true
+mustacheprotocol/www/assets/*.js linguist-vendored=false
+mustacheprotocol/www/assets/*.css linguist-vendored=false
+mustacheprotocol/www/fonts/* -linguist-detectable
