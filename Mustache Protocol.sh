@@ -49,6 +49,19 @@ fi
 
 cd "$GAMEDIR"
 
+# Auto-copy boxart & preview to muOS catalogue if running on muOS
+for cat_dir in "/mnt/mmc/MUOS/info/catalogue" "/mnt/sdcard/MUOS/info/catalogue"; do
+  if [ -d "$cat_dir" ]; then
+    for pdir in "Ports" "PORTS" "ports"; do
+      mkdir -p "$cat_dir/$pdir/box" "$cat_dir/$pdir/preview" 2>/dev/null
+      [ -f "$GAMEDIR/cover.png" ] && cp -f "$GAMEDIR/cover.png" "$cat_dir/$pdir/box/Mustache Protocol.png" 2>/dev/null
+      [ -f "$GAMEDIR/screenshot.png" ] && cp -f "$GAMEDIR/screenshot.png" "$cat_dir/$pdir/preview/Mustache Protocol.png" 2>/dev/null
+    done
+  fi
+done
+
+$ESUDO chmod +x "$GAMEDIR"/retsurf* 2>/dev/null || true
+
 # 3. Locate retsurf Engine (Bundled or System-wide)
 CPU_PART="$(grep -m1 -i 'CPU part' /proc/cpuinfo 2>/dev/null | grep -oiE '0x[0-9a-f]+' | head -1 | tr 'A-Z' 'a-z')"
 select_binary() {
@@ -63,15 +76,15 @@ RUNNER=""
 BINNAME="$(select_binary)"
 
 # Priority 1: Use bundled engine inside port folder
-if [ -x "$GAMEDIR/$BINNAME" ]; then
+if [ -f "$GAMEDIR/$BINNAME" ]; then
   RUNNER="$GAMEDIR/$BINNAME"
-elif [ -x "$GAMEDIR/retsurf.a53" ]; then
+elif [ -f "$GAMEDIR/retsurf.a53" ]; then
   RUNNER="$GAMEDIR/retsurf.a53"
-elif [ -x "$GAMEDIR/retsurf.a55" ]; then
+elif [ -f "$GAMEDIR/retsurf.a55" ]; then
   RUNNER="$GAMEDIR/retsurf.a55"
-elif [ -x "$GAMEDIR/retsurf.a35" ]; then
+elif [ -f "$GAMEDIR/retsurf.a35" ]; then
   RUNNER="$GAMEDIR/retsurf.a35"
-elif [ -x "$GAMEDIR/retsurf" ]; then
+elif [ -f "$GAMEDIR/retsurf" ]; then
   RUNNER="$GAMEDIR/retsurf"
 fi
 
@@ -247,7 +260,7 @@ fi
 
 # 8. Bind Gamepad via gptokeyb (Track exact PID)
 if [ -n "$GPTOKEYB" ] && [ -f "$GAMEDIR/Mustache Protocol.gptk" ]; then
-  $GPTOKEYB "retsurf" -c "$GAMEDIR/Mustache Protocol.gptk" &
+  $GPTOKEYB "$(basename "$RUNNER")" -c "$GAMEDIR/Mustache Protocol.gptk" &
   GPTOKEYB_PID=$!
 fi
 

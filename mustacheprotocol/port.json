@@ -5,7 +5,9 @@
     "Mustache Protocol.sh",
     "mustacheprotocol"
   ],
-  "items_opt": [],
+  "items_opt": [
+    "Mustache Protocol.png"
+  ],
   "attr": {
     "title": "Mustache Protocol",
     "porter": [
@@ -13,7 +15,7 @@
       "Google Antigravity Team"
     ],
     "desc": "Henry Cavill arcade platformer created for Googlebook and Movember. Defend the mustache from rogue digital CGI artists!",
-    "inst": "Ready to Run. Requires the retsurf browser port (installable via PortMaster Manage Ports).",
+    "inst": "Ready to Run. Standalone port with bundled browser runtime.",
     "genres": [
       "action",
       "platformer",
