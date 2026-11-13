@@ -83,6 +83,10 @@ check_port() {
   if command -v nc >/dev/null 2>&1; then
     nc -z 127.0.0.1 "$p" >/dev/null 2>&1
     return $?
+  elif (exec 3<>/dev/tcp/127.0.0.1/"$p") 2>/dev/null; then
+    exec 3<&-
+    exec 3>&-
+    return 0
   elif command -v python3 >/dev/null 2>&1; then
     python3 -c "import socket; s = socket.socket(); s.connect(('127.0.0.1', $p)); s.close()" >/dev/null 2>&1
     return $?
@@ -90,12 +94,25 @@ check_port() {
   return 1
 }
 
-# 5. Dynamic Port Selection (find an open port starting at 8089)
-PORT=8089
-MAX_PORT=8100
-while check_port "$PORT" && [ "$PORT" -lt "$MAX_PORT" ]; do
-  PORT=$((PORT + 1))
-done
+# 5. Helper: Verify HTTP 200 response from local daemon
+verify_http() {
+  local p=$1
+  if command -v curl >/dev/null 2>&1; then
+    local code
+    code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 1 "http://127.0.0.1:$p/index.html" 2>/dev/null)
+    [ "$code" = "200" ] && return 0
+    return 1
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q --spider --timeout=1 "http://127.0.0.1:$p/index.html" >/dev/null 2>&1
+    return $?
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 -c "import urllib.request; resp = urllib.request.urlopen('http://127.0.0.1:$p/index.html', timeout=1); exit(0 if resp.status == 200 else 1)" >/dev/null 2>&1
+    return $?
+  else
+    check_port "$p"
+    return $?
+  fi
+}
 
 # 6. Process State & Cleanup Trap
 SERVER_PID=""
@@ -117,37 +134,75 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-# 7. Start Local Offline Web Server
-if command -v busybox >/dev/null 2>&1 && busybox --list | grep -q "^httpd$"; then
-  busybox httpd -p 127.0.0.1:$PORT -h "$GAMEDIR/www" &
-  SERVER_PID=$!
-elif command -v python3 >/dev/null 2>&1; then
-  python3 -m http.server $PORT --bind 127.0.0.1 --directory "$GAMEDIR/www" >/dev/null 2>&1 &
-  SERVER_PID=$!
-fi
+# 7. Start Local Offline Web Server with Collision Handling & Active Verification
+start_daemon() {
+  local p=$1
+  if command -v busybox >/dev/null 2>&1 && busybox --list | grep -q "^httpd$"; then
+    busybox httpd -p 127.0.0.1:$p -h "$GAMEDIR/www" &
+    echo $!
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 -m http.server "$p" --bind 127.0.0.1 --directory "$GAMEDIR/www" >/dev/null 2>&1 &
+    echo $!
+  fi
+}
 
-# 8. Active Readiness Verification Loop (Max 5s timeout instead of static sleep)
+PORT=8089
+MAX_PORT=8105
 SERVER_READY=0
-for i in $(seq 1 50); do
+
+while [ "$PORT" -le "$MAX_PORT" ]; do
+  # Skip port if already claimed
   if check_port "$PORT"; then
-    SERVER_READY=1
+    PORT=$((PORT + 1))
+    continue
+  fi
+
+  # Attempt to start the server
+  SERVER_PID=$(start_daemon "$PORT")
+  if [ -z "$SERVER_PID" ]; then
+    echo "Error: Neither busybox httpd nor python3 is available to serve game files." > "$GAMEDIR/error.log"
+    exit 1
+  fi
+
+  # Poll server readiness and ensure process stays alive
+  for i in $(seq 1 40); do
+    if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+      # Server exited unexpectedly (e.g. port collision race), abandon and try next port
+      SERVER_PID=""
+      break
+    fi
+    if verify_http "$PORT"; then
+      SERVER_READY=1
+      break
+    fi
+    sleep 0.1
+  done
+
+  if [ "$SERVER_READY" -eq 1 ]; then
     break
   fi
-  sleep 0.1
+
+  # If this port didn't become ready, kill it and try next
+  if [ -n "$SERVER_PID" ]; then
+    kill "$SERVER_PID" 2>/dev/null
+    wait "$SERVER_PID" 2>/dev/null
+    SERVER_PID=""
+  fi
+  PORT=$((PORT + 1))
 done
 
 if [ "$SERVER_READY" -ne 1 ]; then
-  echo "Error: Local HTTP daemon failed to bind to port $PORT within 5 seconds." > "$GAMEDIR/error.log"
+  echo "Error: Local HTTP daemon failed to bind and serve HTTP 200 on ports 8089-$MAX_PORT." > "$GAMEDIR/error.log"
   exit 1
 fi
 
-# 9. Bind Gamepad via gptokeyb (Track exact PID)
+# 8. Bind Gamepad via gptokeyb (Track exact PID)
 if [ -n "$GPTOKEYB" ] && [ -f "$GAMEDIR/Mustache Protocol.gptk" ]; then
   $GPTOKEYB "retsurf" -c "$GAMEDIR/Mustache Protocol.gptk" &
   GPTOKEYB_PID=$!
 fi
 
-# 10. Execute the Game
+# 9. Execute the Game
 if [ -n "$RUNNER" ]; then
   "$RUNNER" "http://127.0.0.1:$PORT/index.html"
 else
