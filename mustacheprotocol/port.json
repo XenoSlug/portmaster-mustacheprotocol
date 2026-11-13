@@ -8,9 +8,12 @@
   "items_opt": [],
   "attr": {
     "title": "Mustache Protocol",
-    "porter": "Google Antigravity Team",
-    "desc": "Henry Cavill's 80s-inspired action platformer created for Googlebook and Movember. Stop rogue CGI artists from erasing all the mustaches in the world!",
-    "inst": "Ready to Run. Drop mustacheprotocol.zip into /MUOS/PortMaster/autoinstall/ or your ports autoinstall directory.",
+    "porter": [
+      "XenoSlug",
+      "Google Antigravity Team"
+    ],
+    "desc": "Henry Cavill's 80s-inspired arcade platformer created for Googlebook and Movember. Stop rogue CGI artists from digitally erasing all the mustaches in the world!",
+    "inst": "Ready to Run. Requires the retsurf browser runtime (installable via PortMaster Manage Ports).",
     "genres": [
       "action",
       "platformer",
@@ -21,9 +24,13 @@
       "cover": "cover.png"
     },
     "rtr": true,
-    "runtime": "retsurf",
+    "runtime": null,
     "reqs": [
-      "opengl"
+      "opengl",
+      "retsurf"
+    ],
+    "arch": [
+      "aarch64"
     ]
   }
 }

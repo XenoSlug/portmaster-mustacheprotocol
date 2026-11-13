@@ -55,23 +55,27 @@ Playing as Henry Cavill, you embark on a mission to stop rogue CGI artists and s
 If you prefer extracting manually:
 
 1. Download [`mustacheprotocol.zip`](https://github.com/XenoSlug/portmaster-mustacheprotocol/releases/latest/download/mustacheprotocol.zip).
-2. Extract the archive directly to the root of your SD card (SD1 or SD2):
+2. Extract the archive directly into your handheld's ports directory:
+   * **muOS:** `/mnt/mmc/ROMS/ports/` (or `ROMS/ports/` on your SD card root)
+   * **ArkOS / AmberELEC / Knulli / ROCKNIX:** `/roms/ports/` (or `/userdata/roms/ports/`)
    ```text
-   sdcard/
-   ├── ROMS/
-   │   └── Ports/
-   │       └── Mustache Protocol.sh
-   └── ports/
-       └── mustacheprotocol/
-           ├── port.json
-           ├── gameinfo.xml
-           ├── Mustache Protocol.gptk
-           ├── cover.png
-           ├── screenshot.png
-           ├── README.md
-           ├── licenses/
-           │   └── LICENSE
-           └── www/ (Complete offline game assets, audio, and videos)
+   ports/
+   ├── Mustache Protocol.sh
+   └── mustacheprotocol/
+       ├── port.json
+       ├── gameinfo.xml
+       ├── Mustache Protocol.gptk
+       ├── cover.png
+       ├── screenshot.png
+       ├── checksums.sha256
+       ├── README.md
+       ├── licenses/
+       │   ├── LICENSE.port
+       │   ├── LICENSE.phaser
+       │   ├── LICENSE.matter
+       │   ├── LICENSE.fonts
+       │   └── COPYRIGHT.game
+       └── www/ (Complete offline game assets, audio, and videos)
    ```
 3. On your handheld, ensure **retsurf** is installed from PortMaster (under *Manage Ports* > *retsurf*).
 4. Launch **Mustache Protocol** from your handheld's Ports / Content Explorer.
