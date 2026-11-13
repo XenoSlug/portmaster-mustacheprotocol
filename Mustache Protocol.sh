@@ -66,10 +66,15 @@ for r in \
   fi
 done
 
-# If retsurf is missing, attempt to fetch runtime via HarbourMaster if network is available
+# If retsurf is missing, attempt to install the retsurf port via HarbourMaster
 if [ -z "$RUNNER" ] && [ -x "$controlfolder/harbourmaster" ]; then
-  $ESUDO "$controlfolder/harbourmaster" --runtime "retsurf"
-  for r in "$controlfolder/../retsurf/retsurf" "$controlfolder/runtimes/retsurf/retsurf"; do
+  $ESUDO "$controlfolder/harbourmaster" --install "retsurf" >/dev/null 2>&1
+  for r in \
+    "$GAMEDIR/../retsurf/retsurf" \
+    "$controlfolder/../retsurf/retsurf" \
+    "/roms/ports/retsurf/retsurf" \
+    "/mnt/mmc/ports/retsurf/retsurf" \
+    "/mnt/sdcard/ports/retsurf/retsurf"; do
     if [ -x "$r" ]; then
       RUNNER="$r"
       break
@@ -220,5 +225,8 @@ fi
 if [ -n "$RUNNER" ]; then
   "$RUNNER" "http://127.0.0.1:$PORT/index.html"
 else
-  echo "Error: retsurf runtime not found. Please install retsurf from PortMaster!" > "$GAMEDIR/error.log"
+  echo "Error: retsurf not found. Please install the 'retsurf' browser port from PortMaster!" > "$GAMEDIR/error.log"
+  if command -v text_viewer >/dev/null 2>&1; then
+    text_viewer -f 24 -t "retsurf Required" -m "Mustache Protocol requires the 'retsurf' browser port.\nPlease install 'retsurf' via PortMaster (Manage Ports)."
+  fi
 fi
