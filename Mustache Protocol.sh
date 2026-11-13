@@ -108,7 +108,19 @@ verify_http() {
   elif command -v python3 >/dev/null 2>&1; then
     python3 -c "import urllib.request; resp = urllib.request.urlopen('http://127.0.0.1:$p/index.html', timeout=1); exit(0 if resp.status == 200 else 1)" >/dev/null 2>&1
     return $?
+  elif { exec 3<>/dev/tcp/127.0.0.1/"$p"; } 2>/dev/null; then
+    # Zero-dependency raw HTTP GET probe via Bash built-in /dev/tcp
+    local resp
+    printf "GET /index.html HTTP/1.0\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n" >&3
+    read -r resp <&3
+    exec 3<&-
+    exec 3>&-
+    case "$resp" in
+      *200*) return 0 ;;
+      *) return 1 ;;
+    esac
   else
+    # Fallback to TCP port reachability if no HTTP inspection tool is available
     check_port "$p"
     return $?
   fi
@@ -138,7 +150,8 @@ trap cleanup EXIT INT TERM
 start_daemon() {
   local p=$1
   if command -v busybox >/dev/null 2>&1 && busybox --list | grep -q "^httpd$"; then
-    busybox httpd -p 127.0.0.1:$p -h "$GAMEDIR/www" &
+    # Important: Run busybox httpd with -f (foreground) so $! captures the actual server process, not an ephemeral fork
+    busybox httpd -f -p 127.0.0.1:$p -h "$GAMEDIR/www" &
     echo $!
   elif command -v python3 >/dev/null 2>&1; then
     python3 -m http.server "$p" --bind 127.0.0.1 --directory "$GAMEDIR/www" >/dev/null 2>&1 &

@@ -101,8 +101,9 @@ The port is mapped with an authentic 16-bit arcade button layout via `gptokeyb` 
 * **Phaser 3 HTML5 Canvas:** The core game runs on the Phaser 3 framework using WebGL / 2D Canvas rendering and Matter.js physics, targeted for 60 FPS performance on lightweight ARM handheld SoCs (Allwinner H700, Rockchip RK3566).
 * **Embedded retsurf Runtime:** Built on Mozilla's Servo browser engine and SDL2, `retsurf` provides hardware-accelerated rendering on Linux handhelds without the memory footprint of desktop Chromium or Electron.
 * **Resilient Local Server Management:**
+  * **Accurate Process Lifetime & BusyBox Foregrounding:** When using BusyBox, `httpd` is invoked in foreground mode (`-f`) within the background job, ensuring `$!` records the server's actual process ID (PID) rather than an ephemeral launcher fork.
   * **Dynamic Port Allocation & Collision Recovery:** The launcher probes candidate ports starting at `8089` (up to `8105`). If a port is occupied or a race condition occurs upon startup, the script detects if the daemon fails to stay alive (`kill -0`) and automatically rolls over to the next port.
-  * **Active HTTP 200 Readiness Verification:** Rather than checking for a raw listening socket or sleeping for fixed intervals, the launcher actively polls for an HTTP 200 OK response on `index.html` using `curl`, `wget`, `python3`, or bash's built-in `/dev/tcp` network redirection before launching `retsurf`.
+  * **Active HTTP 200 Verification:** Rather than checking for a raw listening socket or sleeping for fixed intervals, the launcher actively inspects `http://127.0.0.1:$PORT/index.html` for an HTTP 200 OK status code using `curl`, `wget`, `python3`, or Bash's built-in `/dev/tcp` network redirection (with fallback to TCP socket reachability if no HTTP inspection tools exist).
   * **Safe Process Lifecycle:** Both the server daemon and `gptokeyb` process IDs are strictly tracked. An `EXIT/INT/TERM` shell trap ensures clean termination of child processes without collateral `pkill` impact on other handheld processes.
 
 ---
@@ -116,17 +117,18 @@ For developers, packagers, or offline archivists who wish to verify or dynamical
 git clone https://github.com/XenoSlug/portmaster-mustacheprotocol.git
 cd portmaster-mustacheprotocol
 
-# Verify integrity of currently bundled assets
+# 100% Offline cryptographic verification against SHA-256 manifest
 python3 tools/fetch_assets.py --verify-only
 
 # Or dynamically scrape and re-download latest assets from CDN
 python3 tools/fetch_assets.py --force
 ```
 
-### Dynamic Asset Fetcher Features:
-* **Zero Hardcoded Bundle Hashes:** Dynamically parses `index.html` to discover current Vite script bundles (`main-[hash].js`), CSS stylesheets (`main-[hash].css`), and font manifests.
+### Dynamic Asset Fetcher & Verifier Features:
+* **100% Offline SHA-256 Verification:** In `--verify-only` mode, the tool runs entirely locally without network access, validating all 374 bundled assets against [`checksums.sha256`](mustacheprotocol/checksums.sha256).
+* **Zero Hardcoded Bundle Hashes:** When syncing from CDN, dynamically parses `index.html` to discover current Vite script bundles (`main-[hash].js`), CSS stylesheets (`main-[hash].css`), and font manifests.
 * **Recursive Manifest Parsing:** Traverses discovered CSS stylesheets to locate and download all declared font files (`.woff2`) and scans JavaScript bundles for all sprite, audio, and cutscene asset references.
-* **Integrity Validation & Fail-Fast:** Validates HTTP responses, verifies payload byte lengths, ensures zero 0-byte files, and exits with a non-zero error code if any asset fails to download or verify.
+* **Integrity Validation & Fail-Fast:** Validates HTTP responses, verifies payload byte lengths against `Content-Length`, ensures zero 0-byte files, and exits with a non-zero error code if any asset fails to download or verify.
 
 ---
 
@@ -135,11 +137,11 @@ python3 tools/fetch_assets.py --force
 This project provides two deployment paths:
 
 1. **Community Ready-to-Run (RTR) Package (Current Release):**
-   * Downloadable via GitHub Releases as `mustacheprotocol.zip`.
-   * Completely self-contained and pre-packaged with all 373 game assets for immediate offline play via PortMaster `autoinstall` on muOS and other CFWs.
-2. **Official PortMaster Upstream Inclusion Model:**
+   * Downloadable via GitHub Releases as `mustacheprotocol.zip` (~141 MB).
+   * Completely self-contained and pre-packaged with all 374 game assets and `checksums.sha256` for immediate offline play via PortMaster `autoinstall` on muOS and other CFWs.
+2. **Official PortMaster Upstream Inclusion Model (Proposed Design):**
    * PortMaster's official upstream index maintains strict guidelines regarding redistribution of third-party copyrighted assets.
-   * For official upstream index submission, the launcher architecture is designed to integrate `tools/fetch_assets.py` into a lightweight first-launch setup wizard that fetches game data directly from Google's CDN to the handheld on initial startup, ensuring zero third-party media hosting in the upstream PR.
+   * For upstream index submission, `tools/fetch_assets.py` serves as the blueprint for an interactive first-launch setup script that will download game data directly from Google's CDN to the handheld on initial boot, avoiding third-party media redistribution within the official PortMaster repository.
 
 ---
 

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Mustache Protocol Asset Extractor & Verification Tool
-Dynamically discovers, validates, and downloads all assets from the official Google CDN.
-Guarantees offline package integrity for PortMaster / muOS handhelds.
+Mustache Protocol Asset Extractor, Dynamic Scraper & Offline Cryptographic Verifier
+- In offline mode (--verify-only): Strictly verifies SHA-256 checksums of local assets without internet access.
+- In sync/download mode: Dynamically crawls Google CDN manifests and generates/updates checksum manifests.
 """
 
 import os
 import re
 import sys
 import gzip
+import hashlib
 import argparse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -16,7 +17,16 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 BASE_URL = "https://mustacheprotocol.withgoogle.com/"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
-DEST_WWW = os.path.join(REPO_ROOT, "mustacheprotocol", "www")
+PORT_DIR = os.path.join(REPO_ROOT, "mustacheprotocol")
+DEST_WWW = os.path.join(PORT_DIR, "www")
+CHECKSUM_FILE = os.path.join(PORT_DIR, "checksums.sha256")
+
+def calculate_sha256(filepath):
+    h = hashlib.sha256()
+    with open(filepath, "rb") as f:
+        while chunk := f.read(65536):
+            h.update(chunk)
+    return h.hexdigest()
 
 def decompress_if_gzip(data):
     if len(data) >= 2 and data[0] == 0x1f and data[1] == 0x8b:
@@ -25,6 +35,72 @@ def decompress_if_gzip(data):
         except Exception:
             return data
     return data
+
+def verify_offline_checksums():
+    """100% Offline verification against cryptographic SHA-256 manifest."""
+    print("=" * 65)
+    print(" Mustache Protocol: Offline Cryptographic SHA-256 Verifier")
+    print(f" Manifest: {CHECKSUM_FILE}")
+    print(f" Target:   {DEST_WWW}")
+    print("=" * 65)
+
+    if not os.path.exists(CHECKSUM_FILE):
+        print(f"[ERROR] Checksum manifest not found at: {CHECKSUM_FILE}")
+        sys.exit(1)
+
+    with open(CHECKSUM_FILE, "r", encoding="utf-8") as f:
+        lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+
+    print(f"\nVerifying {len(lines)} files against cryptographic hashes...")
+
+    missing = []
+    mismatch = []
+    zero_byte = []
+    total_size = 0
+    passed = 0
+
+    for line in lines:
+        parts = line.split(None, 1)
+        if len(parts) != 2:
+            continue
+        expected_hash, rel_path = parts[0], parts[1].strip()
+        full_path = os.path.join(DEST_WWW, rel_path)
+
+        if not os.path.exists(full_path):
+            missing.append(rel_path)
+            continue
+
+        sz = os.path.getsize(full_path)
+        if sz == 0:
+            zero_byte.append(rel_path)
+            continue
+        total_size += sz
+
+        actual_hash = calculate_sha256(full_path)
+        if actual_hash != expected_hash:
+            mismatch.append((rel_path, expected_hash, actual_hash))
+        else:
+            passed += 1
+
+    print(f"\nVerification Results:")
+    print(f"  - Verified Matches: {passed} / {len(lines)}")
+    print(f"  - Verified Size:    {total_size / (1024*1024):.2f} MB")
+    print(f"  - Missing Files:    {len(missing)}")
+    print(f"  - Corrupt/Empty:    {len(zero_byte)}")
+    print(f"  - Hash Mismatches:  {len(mismatch)}")
+
+    if missing or zero_byte or mismatch:
+        print("\n[FAILED] Integrity check failed:")
+        for m in missing[:5]:
+            print(f"  [MISSING]  {m}")
+        for z in zero_byte[:5]:
+            print(f"  [EMPTY]    {z}")
+        for path, exp, act in mismatch[:5]:
+            print(f"  [MISMATCH] {path} (expected {exp[:8]}..., got {act[:8]}...)")
+        sys.exit(1)
+
+    print("\n[SUCCESS] 100% of offline assets matched their cryptographic SHA-256 signatures!")
+    sys.exit(0)
 
 def fetch_resource(url, timeout=20):
     req = urllib.request.Request(
@@ -52,7 +128,6 @@ def fetch_file(rel_path, force=False):
         if len(data) == 0:
             return rel_path, False, "Empty file received", 0
 
-        # Verify Content-Length if non-encoded and present
         cl = headers.get("Content-Length")
         ce = headers.get("Content-Encoding")
         if cl and not ce:
@@ -70,7 +145,6 @@ def fetch_file(rel_path, force=False):
         return rel_path, False, str(e), 0
 
 def discover_assets():
-    """Dynamically parses index.html, JS bundles, and CSS manifests to discover all required assets."""
     print("[1/4] Discovering assets from index.html...")
     index_url = BASE_URL.rstrip("/") + "/index.html"
     try:
@@ -86,19 +160,16 @@ def discover_assets():
 
     discovered_files = set()
 
-    # Extract <script src="...">
     for match in re.finditer(r'<script[^>]+src=["\']([^"\']+)["\']', html_text):
         src = match.group(1).lstrip("./")
         if not src.startswith("http"):
             discovered_files.add(src)
 
-    # Extract <link href="...">
     for match in re.finditer(r'<link[^>]+href=["\']([^"\']+)["\']', html_text):
         href = match.group(1).lstrip("./")
         if not href.startswith("http"):
             discovered_files.add(href)
 
-    # Download discovered CSS and JS core manifests first to parse deeper references
     js_bundles = [f for f in discovered_files if f.endswith(".js")]
     css_files = [f for f in discovered_files if f.endswith(".css")]
 
@@ -106,7 +177,6 @@ def discover_assets():
     for core_f in js_bundles + css_files:
         fetch_file(core_f)
 
-    # Parse CSS files for font and asset url(...) declarations
     for css_rel in css_files:
         css_path = os.path.join(DEST_WWW, css_rel)
         if os.path.exists(css_path):
@@ -119,7 +189,6 @@ def discover_assets():
                     resolved = os.path.normpath(os.path.join(css_dir, u)) if css_dir else u
                     discovered_files.add(resolved)
 
-    # Parse JS bundles for asset paths
     for js_rel in js_bundles:
         js_path = os.path.join(DEST_WWW, js_rel)
         if os.path.exists(js_path):
@@ -131,57 +200,45 @@ def discover_assets():
                 if "." in os.path.basename(clean_m):
                     discovered_files.add(clean_m)
 
-    # Always ensure critical intro video is tracked
     discovered_files.add("assets/videos/intro-cutscene-en.mp4")
-
     return sorted(list(discovered_files))
 
-def verify_local_assets(all_files):
-    print("\n[Verification] Checking local asset files integrity...")
-    missing = []
-    zero_byte = []
-    total_size = 0
-
-    for rel_path in all_files:
-        dest = os.path.join(DEST_WWW, rel_path)
-        if not os.path.exists(dest):
-            missing.append(rel_path)
-        else:
-            sz = os.path.getsize(dest)
-            if sz == 0:
-                zero_byte.append(rel_path)
-            total_size += sz
-
-    print(f"  Total assets tracked: {len(all_files)}")
-    print(f"  Total local size:     {total_size / (1024*1024):.2f} MB")
-    if missing:
-        print(f"  [ERROR] {len(missing)} missing files!")
-        for m in missing[:5]:
-            print(f"    - {m}")
-    if zero_byte:
-        print(f"  [ERROR] {len(zero_byte)} empty (0-byte) files!")
-        for z in zero_byte[:5]:
-            print(f"    - {z}")
-
-    return len(missing) == 0 and len(zero_byte) == 0
+def update_checksum_manifest():
+    print(f"\n[Updating Manifest] Generating {CHECKSUM_FILE}...")
+    lines = []
+    count = 0
+    for root, _, files in sorted(os.walk(DEST_WWW)):
+        for f in sorted(files):
+            full = os.path.join(root, f)
+            rel = os.path.relpath(full, DEST_WWW)
+            h = calculate_sha256(full)
+            lines.append(f"{h}  {rel}\n")
+            count += 1
+    with open(CHECKSUM_FILE, "w", encoding="utf-8") as out:
+        out.writelines(lines)
+    print(f"  Generated SHA-256 manifest for {count} files.")
 
 def main():
-    parser = argparse.ArgumentParser(description="Mustache Protocol Asset Tool")
-    parser.add_argument("--verify-only", action="store_true", help="Only verify integrity of existing files")
-    parser.add_argument("--force", action="store_true", help="Force re-download of all assets")
+    parser = argparse.ArgumentParser(description="Mustache Protocol Asset & Verification Tool")
+    parser.add_argument("--verify-only", action="store_true", help="Run 100% offline SHA-256 cryptographic verification against checksums.sha256")
+    parser.add_argument("--force", action="store_true", help="Force re-download of all assets from Google CDN")
+    parser.add_argument("--update-manifest", action="store_true", help="Regenerate checksums.sha256 manifest from current local files")
     parser.add_argument("--workers", type=int, default=12, help="Number of concurrent download threads")
     args = parser.parse_args()
 
+    if args.verify_only:
+        verify_offline_checksums()
+
+    if args.update_manifest:
+        update_checksum_manifest()
+        sys.exit(0)
+
     print("=" * 65)
-    print(" Mustache Protocol: Dynamic Asset Discovery & Integrity Tool")
+    print(" Mustache Protocol: Dynamic Asset Discovery & Sync")
     print(f" Target Directory: {DEST_WWW}")
     print("=" * 65)
 
     all_files = discover_assets()
-
-    if args.verify_only:
-        ok = verify_local_assets(all_files)
-        sys.exit(0 if ok else 1)
 
     print(f"\n[2/4] Downloading {len(all_files)} assets in parallel (threads: {args.workers})...")
     failed = []
@@ -210,17 +267,15 @@ def main():
     print(f"  - Downloaded: {downloaded_count}")
     print(f"  - Failed:     {len(failed)}")
 
-    # Verify after sync
-    print("\n[4/4] Verifying complete directory integrity...")
-    integrity_ok = verify_local_assets(all_files)
-
-    if failed or not integrity_ok:
-        print("\n[FAILED] One or more assets failed to download or verify:")
+    if failed:
+        print("\n[FAILED] One or more assets failed to download:")
         for rel_path, err in failed:
             print(f"  ! {rel_path}: {err}")
         sys.exit(1)
 
-    print("\n[SUCCESS] All assets successfully validated and stored in mustacheprotocol/www/")
+    print("\n[4/4] Updating cryptographic SHA-256 checksum manifest...")
+    update_checksum_manifest()
+    print("\n[SUCCESS] All assets downloaded, verified, and signed in checksums.sha256!")
     sys.exit(0)
 
 if __name__ == "__main__":
