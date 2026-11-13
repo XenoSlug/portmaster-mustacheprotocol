@@ -1,0 +1,9 @@
+{
+  "name": "l3-prop-cables",
+  "width": 550,
+  "height": 92,
+  "scale": 0.4,
+  "masterPath": "references/Masters/Level_3/l3-prop-cables_master.png",
+  "baseX": 275,
+  "baseY": 91
+}

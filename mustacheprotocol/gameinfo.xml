@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gameList>
+  <game>
+    <path>./Mustache Protocol.sh</path>
+    <name>Mustache Protocol</name>
+    <desc>Mustache Protocol is an 80s-inspired retro action platformer starring Henry Cavill. Battle through 3 worlds and epic boss encounters to stop rogue CGI artists from erasing mustaches across the globe!</desc>
+    <image>./mustacheprotocol/cover.png</image>
+    <developer>Henry Cavill &amp; Google</developer>
+    <publisher>Google / Movember</publisher>
+    <genre>Action / Platformer</genre>
+    <releasedate>20261101T000000</releasedate>
+  </game>
+</gameList>

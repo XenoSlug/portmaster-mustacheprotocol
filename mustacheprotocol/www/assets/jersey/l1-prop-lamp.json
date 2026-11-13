@@ -1,0 +1,9 @@
+{
+  "name": "l1-prop-lamp",
+  "width": 60,
+  "height": 179,
+  "scale": 0.1597,
+  "masterPath": "references/Masters/Jersey/l1-prop-lamp_master.png",
+  "baseX": 30,
+  "baseY": 178
+}

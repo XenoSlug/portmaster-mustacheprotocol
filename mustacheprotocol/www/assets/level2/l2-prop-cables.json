@@ -1,0 +1,9 @@
+{
+  "name": "l2-prop-cables",
+  "width": 300,
+  "height": 54,
+  "scale": 0.2193,
+  "masterPath": "references/Masters/Level_2/l2-prop-cables_master.png",
+  "baseX": 150,
+  "baseY": 53
+}

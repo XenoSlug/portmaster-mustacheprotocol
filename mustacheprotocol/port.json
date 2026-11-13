@@ -1,0 +1,29 @@
+{
+  "version": 4,
+  "name": "mustacheprotocol.zip",
+  "items": [
+    "Mustache Protocol.sh",
+    "mustacheprotocol"
+  ],
+  "items_opt": [],
+  "attr": {
+    "title": "Mustache Protocol",
+    "porter": "Google Antigravity Team",
+    "desc": "Henry Cavill's 80s-inspired action platformer created for Googlebook and Movember. Stop rogue CGI artists from erasing all the mustaches in the world!",
+    "inst": "Ready to Run. Drop mustacheprotocol.zip into /MUOS/PortMaster/autoinstall/ or your ports autoinstall directory.",
+    "genres": [
+      "action",
+      "platformer",
+      "arcade"
+    ],
+    "image": {
+      "screenshot": "screenshot.png",
+      "cover": "cover.png"
+    },
+    "rtr": true,
+    "runtime": "retsurf",
+    "reqs": [
+      "opengl"
+    ]
+  }
+}

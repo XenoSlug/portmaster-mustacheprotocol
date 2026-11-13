@@ -1,0 +1,184 @@
+[
+  {
+    "key": "l2-plants-front",
+    "worldX": 0.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 0 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-camera",
+    "worldX": 450.0,
+    "worldY": 320.0,
+    "depth": 15.0,
+    "note": "Studio film camera silhouette on tripod"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 576.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 1 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-dirt-plant-1",
+    "worldX": 800.0,
+    "worldY": 258.2,
+    "depth": 12.0,
+    "note": "Small dirt plant 1 standing on dirt surface, base row 612"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 1152.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 2 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-cables",
+    "worldX": 1213.0,
+    "worldY": 315.0,
+    "depth": 15.0,
+    "note": "Coiled power cable fully down on studio floor below dirt line"
+  },
+  {
+    "key": "l2-prop-dirt-plant-2",
+    "worldX": 1300.0,
+    "worldY": 261.6,
+    "depth": 12.0,
+    "note": "Small dirt plant 2 standing on dirt surface, base row 620"
+  },
+  {
+    "key": "l2-prop-chair",
+    "worldX": 1320.0,
+    "worldY": 320.0,
+    "depth": 15.0,
+    "note": "Blank director chair silhouette in foreground band"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 1728.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 3 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-dirt-plant-3",
+    "worldX": 2200.0,
+    "worldY": 256.5,
+    "depth": 12.0,
+    "note": "Small dirt plant 3 standing on dirt surface, base row 608"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 2304.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 4 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-camera",
+    "worldX": 2480.0,
+    "worldY": 320.0,
+    "depth": 15.0,
+    "note": "Studio film camera silhouette on tripod"
+  },
+  {
+    "key": "l2-prop-cables",
+    "worldX": 2660.0,
+    "worldY": 318.0,
+    "depth": 15.0,
+    "note": "Coiled power cable fully down on studio floor below dirt line"
+  },
+  {
+    "key": "l2-prop-dirt-plant-4",
+    "worldX": 2750.0,
+    "worldY": 263.3,
+    "depth": 12.0,
+    "note": "Small dirt plant 4 standing on dirt surface, base row 624"
+  },
+  {
+    "key": "l2-prop-dirt-plant-1",
+    "worldX": 2875.0,
+    "worldY": 259.5,
+    "depth": 12.0,
+    "note": "Small dirt plant 1 standing on dirt surface, base row 615"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 2880.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 5 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-chair",
+    "worldX": 3200.0,
+    "worldY": 320.0,
+    "depth": 15.0,
+    "note": "Blank director chair silhouette in foreground band"
+  },
+  {
+    "key": "l2-prop-dirt-plant-2",
+    "worldX": 3350.0,
+    "worldY": 257.3,
+    "depth": 12.0,
+    "note": "Small dirt plant 2 standing on dirt surface, base row 610"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 3456.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 6 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-cables",
+    "worldX": 3687.0,
+    "worldY": 314.0,
+    "depth": 15.0,
+    "note": "Coiled power cable fully down on studio floor below dirt line"
+  },
+  {
+    "key": "l2-prop-dirt-plant-3",
+    "worldX": 3900.0,
+    "worldY": 262.4,
+    "depth": 12.0,
+    "note": "Small dirt plant 3 standing on dirt surface, base row 622"
+  },
+  {
+    "key": "l2-plants-front",
+    "worldX": 4032.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Continuous loose front plant row tile 7 on dirt bank line at row 650"
+  },
+  {
+    "key": "l2-prop-camera",
+    "worldX": 4380.0,
+    "worldY": 320.0,
+    "depth": 15.0,
+    "note": "Studio film camera silhouette on tripod"
+  },
+  {
+    "key": "l2-prop-chair",
+    "worldX": 4720.0,
+    "worldY": 320.0,
+    "depth": 15.0,
+    "note": "Blank director chair silhouette before studio corridor transition"
+  },
+  {
+    "key": "l2-plants-front-end",
+    "worldX": 4608.0,
+    "worldY": 274.22,
+    "depth": 12.0,
+    "note": "Cropped end piece of continuous loose front plant row covering dirt bank up to corridor start at x 4926"
+  },
+  {
+    "key": "l2-prop-studio-sign",
+    "worldX": 38.25,
+    "worldY": 263.5,
+    "depth": 11.0,
+    "note": "Studio 40K entrance monument sign on dirt path (MP-104.1)"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "name": "l1-gap-hedge",
+  "width": 420,
+  "height": 110,
+  "scale": 0.25,
+  "masterPath": "references/Masters/Jersey/l1-gap-hedge_master.png",
+  "baseX": 210,
+  "baseY": 110
+}

@@ -1,0 +1,195 @@
+{
+  "family": "celebration",
+  "nativeGrid": {
+    "baseResolution": {
+      "width": 576,
+      "height": 324
+    },
+    "canvasResolution": {
+      "width": 1280,
+      "height": 720
+    },
+    "referenceResolution": {
+      "width": 2752,
+      "height": 1536
+    },
+    "referencePixelScale": 6,
+    "gridOffset": {
+      "x": 5,
+      "y": 2
+    }
+  },
+  "frame": {
+    "texture": "assets/ui/kit/celebration/frame.png",
+    "width": 152,
+    "height": 119,
+    "sliceInsets": {
+      "leftWidth": 68,
+      "rightWidth": 68,
+      "topHeight": 52,
+      "bottomHeight": 51
+    },
+    "innerPadding": {
+      "left": 14,
+      "right": 14,
+      "top": 12,
+      "bottom": 20
+    },
+    "pieces": {
+      "corner-tl": {
+        "file": "assets/ui/kit/celebration/corner-tl.png",
+        "width": 68,
+        "height": 52,
+        "op": "cut"
+      },
+      "corner-tr": {
+        "file": "assets/ui/kit/celebration/corner-tr.png",
+        "width": 68,
+        "height": 52,
+        "op": "mirrored-from-corner-tl"
+      },
+      "corner-bl": {
+        "file": "assets/ui/kit/celebration/corner-bl.png",
+        "width": 68,
+        "height": 51,
+        "op": "cut"
+      },
+      "corner-br": {
+        "file": "assets/ui/kit/celebration/corner-br.png",
+        "width": 68,
+        "height": 51,
+        "op": "mirrored-from-corner-bl"
+      },
+      "edge-top": {
+        "file": "assets/ui/kit/celebration/edge-top.png",
+        "width": 16,
+        "height": 11,
+        "offsetY": 7,
+        "op": "cut"
+      },
+      "edge-bottom": {
+        "file": "assets/ui/kit/celebration/edge-bottom.png",
+        "width": 16,
+        "height": 19,
+        "offsetY": 24,
+        "op": "cut"
+      },
+      "edge-left": {
+        "file": "assets/ui/kit/celebration/edge-left.png",
+        "width": 13,
+        "height": 16,
+        "offsetX": 8,
+        "op": "cut"
+      },
+      "edge-right": {
+        "file": "assets/ui/kit/celebration/edge-right.png",
+        "width": 13,
+        "height": 16,
+        "offsetX": 47,
+        "op": "mirrored-from-edge-left"
+      }
+    }
+  },
+  "titlePlate": {
+    "texture": "assets/ui/kit/celebration/title-plate.png",
+    "width": 28,
+    "height": 32,
+    "sliceInsets": {
+      "leftWidth": 6,
+      "rightWidth": 6,
+      "topHeight": 0,
+      "bottomHeight": 0
+    },
+    "pieces": {
+      "title-left": {
+        "file": "assets/ui/kit/celebration/title-left.png",
+        "width": 6,
+        "height": 32,
+        "op": "cut"
+      },
+      "title-middle": {
+        "file": "assets/ui/kit/celebration/title-middle.png",
+        "width": 16,
+        "height": 32,
+        "op": "cut"
+      },
+      "title-right": {
+        "file": "assets/ui/kit/celebration/title-right.png",
+        "width": 6,
+        "height": 32,
+        "op": "mirrored-from-title-left"
+      }
+    }
+  },
+  "button": {
+    "referencePixelScale": 3,
+    "normal": {
+      "texture": "assets/ui/kit/button/button-normal.png",
+      "width": 36,
+      "height": 31,
+      "sliceInsets": {
+        "leftWidth": 10,
+        "rightWidth": 10,
+        "topHeight": 0,
+        "bottomHeight": 0
+      },
+      "pieces": {
+        "button-normal-left": {
+          "file": "assets/ui/kit/button/button-normal-left.png",
+          "width": 10,
+          "height": 31,
+          "op": "cut"
+        },
+        "button-normal-middle": {
+          "file": "assets/ui/kit/button/button-normal-middle.png",
+          "width": 16,
+          "height": 31,
+          "op": "cut"
+        },
+        "button-normal-right": {
+          "file": "assets/ui/kit/button/button-normal-right.png",
+          "width": 10,
+          "height": 31,
+          "op": "mirrored-from-button-normal-left"
+        }
+      }
+    },
+    "hover": {
+      "texture": "assets/ui/kit/button/button-hover.png",
+      "width": 66,
+      "height": 31,
+      "sliceInsets": {
+        "leftWidth": 25,
+        "rightWidth": 25,
+        "topHeight": 0,
+        "bottomHeight": 0
+      },
+      "pieces": {
+        "button-hover-left": {
+          "file": "assets/ui/kit/button/button-hover-left.png",
+          "width": 25,
+          "height": 31,
+          "op": "mirrored-from-button-hover-right"
+        },
+        "button-hover-middle": {
+          "file": "assets/ui/kit/button/button-hover-middle.png",
+          "width": 16,
+          "height": 31,
+          "op": "cut"
+        },
+        "button-hover-right": {
+          "file": "assets/ui/kit/button/button-hover-right.png",
+          "width": 25,
+          "height": 31,
+          "op": "cut"
+        }
+      }
+    },
+    "iconMustache": {
+      "file": "assets/ui/kit/button/button-icon-mustache.png",
+      "width": 37,
+      "height": 15,
+      "op": "cut-right-half-and-mirrored"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "l2-plants-front",
+  "width": 1376,
+  "height": 768,
+  "scale": 1.0,
+  "masterPath": "references/Masters/Level_2/l2-plants-front_master.png",
+  "baseX": 0,
+  "baseY": 650
+}

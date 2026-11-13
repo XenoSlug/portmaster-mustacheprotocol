@@ -1,0 +1,104 @@
+[
+  {
+    "key": "l2-strip-forest-oak",
+    "worldX": 0.0,
+    "wallLeft": 0,
+    "wallRight": 991
+  },
+  {
+    "key": "l2-strip-forest-twin",
+    "worldX": 339.49,
+    "wallLeft": 0,
+    "wallRight": 1043
+  },
+  {
+    "key": "l2-strip-forest-mushrooms",
+    "worldX": 700.74,
+    "wallLeft": 0,
+    "wallRight": 1014
+  },
+  {
+    "key": "l2-strip-forest-dense",
+    "worldX": 1049.86,
+    "wallLeft": 0,
+    "wallRight": 944
+  },
+  {
+    "key": "l2-strip-forest-arch",
+    "worldX": 1369.67,
+    "wallLeft": 0,
+    "wallRight": 937
+  },
+  {
+    "key": "l2-strip-forest-oak",
+    "worldX": 1686.56,
+    "wallLeft": 0,
+    "wallRight": 991
+  },
+  {
+    "key": "l2-strip-forest-arch-mushrooms",
+    "worldX": 2026.05,
+    "wallLeft": 0,
+    "wallRight": 872
+  },
+  {
+    "key": "l2-strip-forest-dense",
+    "worldX": 2315.72,
+    "wallLeft": 0,
+    "wallRight": 944
+  },
+  {
+    "key": "l2-strip-forest-twin",
+    "worldX": 2635.53,
+    "wallLeft": 0,
+    "wallRight": 1043
+  },
+  {
+    "key": "l2-strip-forest-arch",
+    "worldX": 2996.79,
+    "wallLeft": 0,
+    "wallRight": 937
+  },
+  {
+    "key": "l2-strip-forest-mushrooms",
+    "worldX": 3313.67,
+    "wallLeft": 0,
+    "wallRight": 1014
+  },
+  {
+    "key": "l2-strip-forest-oak",
+    "worldX": 3662.79,
+    "wallLeft": 0,
+    "wallRight": 991
+  },
+  {
+    "key": "l2-strip-forest-dense",
+    "worldX": 4002.28,
+    "wallLeft": 0,
+    "wallRight": 944
+  },
+  {
+    "key": "l2-strip-forest-arch-mushrooms",
+    "worldX": 4322.09,
+    "wallLeft": 0,
+    "wallRight": 872
+  },
+  {
+    "key": "l2-strip-forest-twin",
+    "worldX": 4611.77,
+    "wallLeft": 0,
+    "wallRight": 1043
+  },
+  {
+    "key": "l2-strip-forest-mushrooms",
+    "worldX": 4973.02,
+    "wallLeft": 0,
+    "wallRight": 1014
+  },
+  {
+    "key": "l2-strip-forest-oak",
+    "worldX": 5322.14,
+    "wallLeft": 0,
+    "wallRight": 991
+  }
+]

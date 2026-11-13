@@ -1,0 +1,9 @@
+{
+  "name": "l2-prop-chair",
+  "width": 132,
+  "height": 149,
+  "scale": 0.1757,
+  "masterPath": "references/Masters/Level_2/l2-prop-chair_master.png",
+  "baseX": 66,
+  "baseY": 148
+}

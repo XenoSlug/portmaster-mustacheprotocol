@@ -1,0 +1,25 @@
+# Mustache Protocol - PortMaster Gamepad Configuration
+back = esc
+start = esc
+
+a = space
+b = l
+x = j
+y = k
+
+l1 = o
+l2 = o
+r1 = i
+r2 = i
+
+up = up
+down = down
+left = left
+right = right
+
+left_analog_up = up
+left_analog_down = down
+left_analog_left = left
+left_analog_right = right
+
+select = b

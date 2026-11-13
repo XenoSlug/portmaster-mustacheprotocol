@@ -1,0 +1,104 @@
+[
+  {
+    "key": "l1-strip-barbershop",
+    "worldX": 40.0,
+    "wallLeft": 8,
+    "wallRight": 721
+  },
+  {
+    "key": "l1-strip-g1",
+    "worldX": 337.63,
+    "wallLeft": 0,
+    "wallRight": 632
+  },
+  {
+    "key": "l1-strip-garage",
+    "worldX": 601.35,
+    "wallLeft": 3,
+    "wallRight": 330
+  },
+  {
+    "key": "l1-strip-g2",
+    "worldX": 737.4,
+    "wallLeft": 0,
+    "wallRight": 593
+  },
+  {
+    "key": "l1-strip-g3",
+    "worldX": 984.79,
+    "wallLeft": 0,
+    "wallRight": 774
+  },
+  {
+    "key": "l1-strip-gamestore",
+    "worldX": 1307.95,
+    "wallLeft": 0,
+    "wallRight": 305
+  },
+  {
+    "key": "l1-strip-g4",
+    "worldX": 1434.79,
+    "wallLeft": 0,
+    "wallRight": 631
+  },
+  {
+    "key": "l1-strip-g2",
+    "worldX": 1698.09,
+    "wallLeft": 0,
+    "wallRight": 593
+  },
+  {
+    "key": "l1-strip-g3",
+    "worldX": 1945.49,
+    "wallLeft": 0,
+    "wallRight": 774
+  },
+  {
+    "key": "l1-strip-petstore",
+    "worldX": 2268.65,
+    "wallLeft": 1,
+    "wallRight": 348
+  },
+  {
+    "key": "l1-strip-g4",
+    "worldX": 2413.07,
+    "wallLeft": 0,
+    "wallRight": 631
+  },
+  {
+    "key": "l1-strip-g2",
+    "worldX": 2676.37,
+    "wallLeft": 0,
+    "wallRight": 593
+  },
+  {
+    "key": "l1-strip-g3",
+    "worldX": 2923.77,
+    "wallLeft": 0,
+    "wallRight": 774
+  },
+  {
+    "key": "l1-strip-g1",
+    "worldX": 3246.93,
+    "wallLeft": 0,
+    "wallRight": 632
+  },
+  {
+    "key": "l1-strip-g3",
+    "worldX": 3510.65,
+    "wallLeft": 0,
+    "wallRight": 774
+  },
+  {
+    "key": "l1-strip-g1",
+    "worldX": 3833.81,
+    "wallLeft": 0,
+    "wallRight": 632
+  },
+  {
+    "key": "l1-end-school",
+    "worldX": 4205.72,
+    "wallLeft": 0,
+    "wallRight": 1305
+  }
+]

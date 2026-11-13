@@ -1,0 +1,32 @@
+{
+  "key": "s2-eaters",
+  "frameWidth": 467,
+  "frameHeight": 450,
+  "frameCount": 14,
+  "fps": 24,
+  "loop": true,
+  "gridCols": 4,
+  "gridRows": 4,
+  "sceneX": 412,
+  "sceneY": 254,
+  "seamFrame": 7,
+  "period": 14,
+  "secondsPerCycle": 0.5833,
+  "sourceIndices": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "seamMaePct": 0.26
+}

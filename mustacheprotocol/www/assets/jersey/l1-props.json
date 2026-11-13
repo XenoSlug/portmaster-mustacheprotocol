@@ -1,0 +1,289 @@
+[
+  {
+    "key": "l1-prop-welcome",
+    "worldX": 57.0,
+    "worldY": 268.3125,
+    "depth": 15.0,
+    "note": "At level start on quay top (row 636), in front of characters (depth 15.0) and below foreground water layers (21-22)"
+  },
+  {
+    "key": "l1-prop-car",
+    "worldX": 665.0,
+    "worldY": 246.0,
+    "depth": 3.5,
+    "note": "Parked on street pavement in front of modernist Fancy Garage showroom"
+  },
+  {
+    "key": "l1-prop-phonebox",
+    "worldX": 458.0,
+    "worldY": 235.0,
+    "depth": 2.8,
+    "note": "On pavement against G1 red/blue house seam between front doors"
+  },
+  {
+    "key": "l1-prop-phonebox",
+    "worldX": 2540.0,
+    "worldY": 235.0,
+    "depth": 2.8,
+    "note": "On pavement against G4 house wall between front doors"
+  },
+  {
+    "key": "l1-prop-ladder",
+    "worldX": 1185.0,
+    "worldY": 235.0,
+    "depth": 2.8,
+    "note": "Leaning against plain yellow wall of G3 generic strip"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 295.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On barbershop strip yellow house wall right of entrance door"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 575.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G1 red house wall left of garage strip"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 840.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G2 cream house wall between doors"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 1260.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G3 house wall right of ladder"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 1620.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G4 red house wall between doors"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 2190.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G3 yellow house wall before pet store"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 2850.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G2 house wall between doors"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 3450.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On G1 house wall between doors"
+  },
+  {
+    "key": "l1-prop-lamp",
+    "worldX": 4030.0,
+    "worldY": 234.0,
+    "depth": 2.85,
+    "note": "On final G1 house wall before school entrance"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 220.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=220"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 380.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=380"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 540.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=540"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 700.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=700"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 860.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=860"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1020.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1020"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1180.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1180"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1340.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1340"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1500.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1500"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1660.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1660"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1820.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1820"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 1980.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=1980"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 2140.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=2140"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 2300.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=2300"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 2460.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=2460"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 2620.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=2620"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 2780.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=2780"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 2940.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=2940"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 3100.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=3100"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 3260.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=3260"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 3420.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=3420"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 3580.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=3580"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 3740.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=3740"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 3900.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=3900"
+  },
+  {
+    "key": "l1-prop-bollard",
+    "worldX": 4060.0,
+    "worldY": 268.3125,
+    "depth": 4.5,
+    "note": "Standing on stone quay edge top (row 636) at regular interval x=4060"
+  },
+  {
+    "key": "l1-gap-hedge",
+    "worldX": 4186.28,
+    "worldY": 236.0,
+    "depth": 2.85,
+    "note": "Hedge covering gap from right wall of last g1 strip (world x 4098.4) into school forecourt (world x 4274.2), depth 2.85 in front of strips and school piece, below characters (depth 10.0)"
+  },
+  {
+    "key": "l1-prop-school-sign",
+    "worldX": 4128.75,
+    "worldY": 268.3125,
+    "depth": 15.0,
+    "note": "Prep school wooden entrance sign on posts in foreground curb (MP-120)"
+  }
+]

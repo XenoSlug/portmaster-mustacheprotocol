@@ -1,0 +1,134 @@
+[
+  {
+    "key": "l3-strip-servers",
+    "worldX": 0.0,
+    "wallLeft": 0,
+    "wallRight": 827
+  },
+  {
+    "key": "l3-strip-cooler",
+    "worldX": 287.58,
+    "wallLeft": 0,
+    "wallRight": 642
+  },
+  {
+    "key": "l3-strip-heatsink",
+    "worldX": 497.72,
+    "wallLeft": 0,
+    "wallRight": 709
+  },
+  {
+    "key": "l3-strip-servers",
+    "worldX": 735.91,
+    "wallLeft": 0,
+    "wallRight": 827
+  },
+  {
+    "key": "l3-strip-cables",
+    "worldX": 1023.49,
+    "wallLeft": 0,
+    "wallRight": 759
+  },
+  {
+    "key": "l3-strip-servers",
+    "worldX": 1282.6,
+    "wallLeft": 0,
+    "wallRight": 827
+  },
+  {
+    "key": "l3-strip-heatsink",
+    "worldX": 1570.19,
+    "wallLeft": 0,
+    "wallRight": 709
+  },
+  {
+    "key": "l3-strip-cooler",
+    "worldX": 1808.37,
+    "wallLeft": 0,
+    "wallRight": 642
+  },
+  {
+    "key": "l3-strip-pillar",
+    "worldX": 2018.51,
+    "wallLeft": 0,
+    "wallRight": 537
+  },
+  {
+    "key": "l3-strip-cooler",
+    "worldX": 2184.7,
+    "wallLeft": 0,
+    "wallRight": 642
+  },
+  {
+    "key": "l3-strip-heatsink",
+    "worldX": 2394.84,
+    "wallLeft": 0,
+    "wallRight": 709
+  },
+  {
+    "key": "l3-strip-pillar",
+    "worldX": 2633.02,
+    "wallLeft": 0,
+    "wallRight": 537
+  },
+  {
+    "key": "l3-strip-servers",
+    "worldX": 2799.21,
+    "wallLeft": 0,
+    "wallRight": 827
+  },
+  {
+    "key": "l3-strip-cables",
+    "worldX": 3086.79,
+    "wallLeft": 0,
+    "wallRight": 759
+  },
+  {
+    "key": "l3-strip-cooler",
+    "worldX": 3345.91,
+    "wallLeft": 0,
+    "wallRight": 642
+  },
+  {
+    "key": "l3-strip-cables",
+    "worldX": 3556.05,
+    "wallLeft": 0,
+    "wallRight": 759
+  },
+  {
+    "key": "l3-strip-servers",
+    "worldX": 3815.16,
+    "wallLeft": 0,
+    "wallRight": 827
+  },
+  {
+    "key": "l3-strip-pillar",
+    "worldX": 4102.74,
+    "wallLeft": 0,
+    "wallRight": 537
+  },
+  {
+    "key": "l3-strip-heatsink",
+    "worldX": 4268.93,
+    "wallLeft": 0,
+    "wallRight": 709
+  },
+  {
+    "key": "l3-strip-pillar",
+    "worldX": 4507.12,
+    "wallLeft": 0,
+    "wallRight": 537
+  },
+  {
+    "key": "l3-strip-cables",
+    "worldX": 4673.3,
+    "wallLeft": 0,
+    "wallRight": 759
+  },
+  {
+    "key": "l3-strip-pillar",
+    "worldX": 4932.42,
+    "wallLeft": 0,
+    "wallRight": 537
+  }
+]
