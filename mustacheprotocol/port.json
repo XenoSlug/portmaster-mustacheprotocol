@@ -12,8 +12,8 @@
       "XenoSlug",
       "Google Antigravity Team"
     ],
-    "desc": "Henry Cavill's 80s-inspired arcade platformer created for Googlebook and Movember. Stop rogue CGI artists from digitally erasing all the mustaches in the world!",
-    "inst": "Ready to Run. Requires the retsurf browser runtime (installable via PortMaster Manage Ports).",
+    "desc": "Henry Cavill arcade platformer created for Googlebook and Movember. Defend the mustache from rogue digital CGI artists!",
+    "inst": "Ready to Run. Requires the retsurf browser port (installable via PortMaster Manage Ports).",
     "genres": [
       "action",
       "platformer",
@@ -26,8 +26,7 @@
     "rtr": true,
     "runtime": null,
     "reqs": [
-      "opengl",
-      "retsurf"
+      "opengl"
     ],
     "arch": [
       "aarch64"
