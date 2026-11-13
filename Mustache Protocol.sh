@@ -149,13 +149,14 @@ trap cleanup EXIT INT TERM
 # 7. Start Local Offline Web Server with Collision Handling & Active Verification
 start_daemon() {
   local p=$1
+  SERVER_PID=""
   if command -v busybox >/dev/null 2>&1 && busybox --list | grep -q "^httpd$"; then
-    # Important: Run busybox httpd with -f (foreground) so $! captures the actual server process, not an ephemeral fork
-    busybox httpd -f -p 127.0.0.1:$p -h "$GAMEDIR/www" &
-    echo $!
+    # Important: Run busybox httpd with -f (foreground) and redirect stdout/stderr to avoid hanging open file descriptors
+    busybox httpd -f -p 127.0.0.1:$p -h "$GAMEDIR/www" >/dev/null 2>&1 &
+    SERVER_PID=$!
   elif command -v python3 >/dev/null 2>&1; then
     python3 -m http.server "$p" --bind 127.0.0.1 --directory "$GAMEDIR/www" >/dev/null 2>&1 &
-    echo $!
+    SERVER_PID=$!
   fi
 }
 
@@ -170,8 +171,8 @@ while [ "$PORT" -le "$MAX_PORT" ]; do
     continue
   fi
 
-  # Attempt to start the server
-  SERVER_PID=$(start_daemon "$PORT")
+  # Attempt to start the server directly in shell (avoid command-substitution subshell pipe hangs)
+  start_daemon "$PORT"
   if [ -z "$SERVER_PID" ]; then
     echo "Error: Neither busybox httpd nor python3 is available to serve game files." > "$GAMEDIR/error.log"
     exit 1

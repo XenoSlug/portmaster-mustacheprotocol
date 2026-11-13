@@ -101,7 +101,7 @@ The port is mapped with an authentic 16-bit arcade button layout via `gptokeyb` 
 * **Phaser 3 HTML5 Canvas:** The core game runs on the Phaser 3 framework using WebGL / 2D Canvas rendering and Matter.js physics, targeted for 60 FPS performance on lightweight ARM handheld SoCs (Allwinner H700, Rockchip RK3566).
 * **Embedded retsurf Runtime:** Built on Mozilla's Servo browser engine and SDL2, `retsurf` provides hardware-accelerated rendering on Linux handhelds without the memory footprint of desktop Chromium or Electron.
 * **Resilient Local Server Management:**
-  * **Accurate Process Lifetime & BusyBox Foregrounding:** When using BusyBox, `httpd` is invoked in foreground mode (`-f`) within the background job, ensuring `$!` records the server's actual process ID (PID) rather than an ephemeral launcher fork.
+  * **Direct Shell Invocation & Pipe-Safe Daemonization:** The server is launched directly within the parent shell session without subshell command substitutions (`$(...)`), and all standard descriptors (`stdout`/`stderr`) are cleanly redirected. In BusyBox environments, `httpd` is invoked in foreground mode (`-f`) within the backgrounded job, ensuring `$!` records the server's true process ID (PID) without risking inherited pipe hangs.
   * **Dynamic Port Allocation & Collision Recovery:** The launcher probes candidate ports starting at `8089` (up to `8105`). If a port is occupied or a race condition occurs upon startup, the script detects if the daemon fails to stay alive (`kill -0`) and automatically rolls over to the next port.
   * **Active HTTP 200 Verification:** Rather than checking for a raw listening socket or sleeping for fixed intervals, the launcher actively inspects `http://127.0.0.1:$PORT/index.html` for an HTTP 200 OK status code using `curl`, `wget`, `python3`, or Bash's built-in `/dev/tcp` network redirection (with fallback to TCP socket reachability if no HTTP inspection tools exist).
   * **Safe Process Lifecycle:** Both the server daemon and `gptokeyb` process IDs are strictly tracked. An `EXIT/INT/TERM` shell trap ensures clean termination of child processes without collateral `pkill` impact on other handheld processes.
@@ -125,7 +125,7 @@ python3 tools/fetch_assets.py --force
 ```
 
 ### Dynamic Asset Fetcher & Verifier Features:
-* **100% Offline SHA-256 Verification:** In `--verify-only` mode, the tool runs entirely locally without network access, validating all 374 bundled assets against [`checksums.sha256`](mustacheprotocol/checksums.sha256).
+* **100% Offline SHA-256 Verification:** In `--verify-only` mode, the tool operates entirely offline without network access, verifying all 374 bundled assets against [`checksums.sha256`](mustacheprotocol/checksums.sha256), rejecting malformed manifest entries, and flagging any extra unlisted files on disk.
 * **Zero Hardcoded Bundle Hashes:** When syncing from CDN, dynamically parses `index.html` to discover current Vite script bundles (`main-[hash].js`), CSS stylesheets (`main-[hash].css`), and font manifests.
 * **Recursive Manifest Parsing:** Traverses discovered CSS stylesheets to locate and download all declared font files (`.woff2`) and scans JavaScript bundles for all sprite, audio, and cutscene asset references.
 * **Integrity Validation & Fail-Fast:** Validates HTTP responses, verifies payload byte lengths against `Content-Length`, ensures zero 0-byte files, and exits with a non-zero error code if any asset fails to download or verify.

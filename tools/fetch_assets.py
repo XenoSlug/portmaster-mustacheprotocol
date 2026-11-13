@@ -49,21 +49,27 @@ def verify_offline_checksums():
         sys.exit(1)
 
     with open(CHECKSUM_FILE, "r", encoding="utf-8") as f:
-        lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+        raw_lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
-    print(f"\nVerifying {len(lines)} files against cryptographic hashes...")
+    print(f"\nVerifying {len(raw_lines)} manifest entries against cryptographic hashes...")
 
+    manifest_files = set()
+    malformed = []
     missing = []
     mismatch = []
     zero_byte = []
     total_size = 0
     passed = 0
 
-    for line in lines:
-        parts = line.split(None, 1)
-        if len(parts) != 2:
+    # 1. Parse and validate manifest lines
+    for line_no, line in enumerate(raw_lines, 1):
+        m = re.match(r"^([a-fA-F0-9]{64})\s+(.+)$", line)
+        if not m:
+            malformed.append((line_no, line))
             continue
-        expected_hash, rel_path = parts[0], parts[1].strip()
+        expected_hash = m.group(1).lower()
+        rel_path = m.group(2).strip()
+        manifest_files.add(rel_path)
         full_path = os.path.join(DEST_WWW, rel_path)
 
         if not os.path.exists(full_path):
@@ -82,24 +88,39 @@ def verify_offline_checksums():
         else:
             passed += 1
 
-    print(f"\nVerification Results:")
-    print(f"  - Verified Matches: {passed} / {len(lines)}")
-    print(f"  - Verified Size:    {total_size / (1024*1024):.2f} MB")
-    print(f"  - Missing Files:    {len(missing)}")
-    print(f"  - Corrupt/Empty:    {len(zero_byte)}")
-    print(f"  - Hash Mismatches:  {len(mismatch)}")
+    # 2. Check for extra unlisted files on disk
+    disk_files = set()
+    for root, _, files in os.walk(DEST_WWW):
+        for f in files:
+            rel = os.path.relpath(os.path.join(root, f), DEST_WWW)
+            disk_files.add(rel)
 
-    if missing or zero_byte or mismatch:
+    unlisted = sorted(list(disk_files - manifest_files))
+
+    print(f"\nVerification Results:")
+    print(f"  - Verified Matches:     {passed} / {len(raw_lines)}")
+    print(f"  - Verified Size:        {total_size / (1024*1024):.2f} MB")
+    print(f"  - Malformed Entries:    {len(malformed)}")
+    print(f"  - Missing Files:        {len(missing)}")
+    print(f"  - Corrupt/Empty:        {len(zero_byte)}")
+    print(f"  - Hash Mismatches:      {len(mismatch)}")
+    print(f"  - Extra Unlisted Files: {len(unlisted)}")
+
+    if malformed or missing or zero_byte or mismatch or unlisted:
         print("\n[FAILED] Integrity check failed:")
+        for line_no, bad in malformed[:5]:
+            print(f"  [MALFORMED] Line {line_no}: {bad}")
         for m in missing[:5]:
-            print(f"  [MISSING]  {m}")
+            print(f"  [MISSING]   {m}")
         for z in zero_byte[:5]:
-            print(f"  [EMPTY]    {z}")
+            print(f"  [EMPTY]     {z}")
         for path, exp, act in mismatch[:5]:
-            print(f"  [MISMATCH] {path} (expected {exp[:8]}..., got {act[:8]}...)")
+            print(f"  [MISMATCH]  {path} (expected {exp[:8]}..., got {act[:8]}...)")
+        for u in unlisted[:5]:
+            print(f"  [UNLISTED]  {u}")
         sys.exit(1)
 
-    print("\n[SUCCESS] 100% of offline assets matched their cryptographic SHA-256 signatures!")
+    print("\n[SUCCESS] 100% of offline assets matched their cryptographic SHA-256 signatures with zero unlisted or malformed files!")
     sys.exit(0)
 
 def fetch_resource(url, timeout=20):
